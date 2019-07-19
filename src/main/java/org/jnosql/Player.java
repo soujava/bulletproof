@@ -35,7 +35,7 @@ public class Player {
     @PositiveOrZero
     private int goal = 0;
 
-    private Player(String name, Year start, Year end, Email email, Position position, MonetaryAmount salary) {
+    Player(String name, Year start, Year end, Email email, Position position, MonetaryAmount salary) {
         this.name = name;
         this.start = start;
         this.end = end;
@@ -90,6 +90,11 @@ public class Player {
 
     public static PlayerBuilder builder() {
         return new PlayerBuilder();
+    }
+
+    public static FluentPlayer.PlayerStart name(String name) {
+        FluentPlayer dsl = new PlayerDSL();
+        return dsl.name(name);
     }
 
     public static class PlayerBuilder {

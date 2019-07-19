@@ -82,4 +82,19 @@ class PlayerTest {
         assertThrows(IllegalArgumentException.class, () -> marta.setEnd(end));
     }
 
+    @Test
+    public void shouldCreateInstanceDSL() {
+        CurrencyUnit usd = Monetary.getCurrency(Locale.US);
+        MonetaryAmount salary = Money.of(1_000_000, usd);
+        Email email = Email.of("marta@marta.com");
+        Year start = Year.now();
+        Year end = start.plus(1, ChronoUnit.YEARS);
+
+        Player marta = Player.name("Marta")
+                .start(start)
+                .end(end).email(email)
+                .position(Position.FORWARD)
+                .salary(salary);
+        Assertions.assertNotNull(marta);
+    }
 }
