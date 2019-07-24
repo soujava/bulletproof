@@ -11,6 +11,7 @@ import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
+import static org.jnosql.PlayerTestDataBuilder.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PlayerTest {
@@ -50,16 +51,11 @@ class PlayerTest {
 
     @Test
     public void shouldCreateInstance() {
-        CurrencyUnit usd = Monetary.getCurrency(Locale.US);
-        MonetaryAmount salary = Money.of(1_000_000, usd);
-        Email email = Email.of("marta@marta.com");
-        Year start = Year.now();
-
-        Player marta = Player.builder().withName("Marta")
-                .withEmail(email)
-                .withSalary(salary)
-                .withStart(start)
-                .withPosition(Position.FORWARD)
+        Player marta = Player.builder().withName(NAME)
+                .withEmail(EMAIL)
+                .withSalary(SALARY)
+                .withStart(START)
+                .withPosition(POSITION)
                 .build();
 
         Assertions.assertNotNull(marta);
@@ -67,18 +63,8 @@ class PlayerTest {
 
     @Test
     public void shouldNotAllowSetWrongPeriod() {
-        CurrencyUnit usd = Monetary.getCurrency(Locale.US);
-        MonetaryAmount salary = Money.of(1_000_000, usd);
-        Email email = Email.of("marta@marta.com");
-        Year start = Year.now();
-        Year end = start.plus(-1, ChronoUnit.YEARS);
-
-        Player marta = Player.builder().withName("Marta")
-                .withEmail(email)
-                .withSalary(salary)
-                .withStart(start)
-                .withPosition(Position.FORWARD)
-                .build();
+        Year end = START.plus(-1, ChronoUnit.YEARS);
+        Player marta = PlayerTestDataBuilder.martaPlayer();
         assertThrows(IllegalArgumentException.class, () -> marta.setEnd(end));
     }
 
