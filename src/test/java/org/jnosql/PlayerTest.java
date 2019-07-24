@@ -11,7 +11,8 @@ import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.jnosql.PlayerTestDataBuilder.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
@@ -50,16 +51,11 @@ class PlayerTest {
 
     @Test
     public void shouldCreateInstance() {
-        CurrencyUnit usd = Monetary.getCurrency(Locale.US);
-        MonetaryAmount salary = Money.of(1_000_000, usd);
-        Email email = Email.of("marta@marta.com");
-        Year start = Year.now();
-
-        Player marta = Player.builder().withName("Marta")
-                .withEmail(email)
-                .withSalary(salary)
-                .withStart(start)
-                .withPosition(Position.FORWARD)
+        Player marta = Player.builder().withName(NAME)
+                .withEmail(EMAIL)
+                .withSalary(SALARY)
+                .withStart(START)
+                .withPosition(POSITION)
                 .build();
 
         Assertions.assertNotNull(marta);
@@ -67,18 +63,8 @@ class PlayerTest {
 
     @Test
     public void shouldNotAllowSetWrongPeriod() {
-        CurrencyUnit usd = Monetary.getCurrency(Locale.US);
-        MonetaryAmount salary = Money.of(1_000_000, usd);
-        Email email = Email.of("marta@marta.com");
-        Year start = Year.now();
-        Year end = start.plus(-1, ChronoUnit.YEARS);
-
-        Player marta = Player.builder().withName("Marta")
-                .withEmail(email)
-                .withSalary(salary)
-                .withStart(start)
-                .withPosition(Position.FORWARD)
-                .build();
+        Year end = START.plus(-1, ChronoUnit.YEARS);
+        Player marta = PlayerTestDataBuilder.martaPlayer();
         assertThrows(IllegalArgumentException.class, () -> marta.setEnd(end));
     }
 
@@ -96,5 +82,45 @@ class PlayerTest {
                 .position(Position.FORWARD)
                 .salary(salary);
         Assertions.assertNotNull(marta);
+    }
+
+    @Test
+    public void shouldCreateBuilderWithInstanceData() {
+        Player marta = PlayerTestDataBuilder.martaPlayer();
+        Player.PlayerBuilder builder = marta.toBuilder();
+        assertNotNull(builder);
+    }
+
+
+    @Test
+    public void shouldCreateInstanceWithPopulatedBuilder() {
+        Player marta = PlayerTestDataBuilder.martaPlayer();
+        Player martaNew = marta.toBuilder().build();
+
+        assertEquals(marta.getName(), martaNew.getName());
+        assertEquals(marta.getStart(), martaNew.getStart());
+        assertEquals(marta.getEnd(), martaNew.getEnd());
+        assertEquals(marta.getEmail(), martaNew.getEmail());
+        assertEquals(marta.getPosition(), martaNew.getPosition());
+        assertEquals(marta.getSalary(), martaNew.getSalary());
+        assertEquals(marta.getGoal(), martaNew.getGoal());
+    }
+
+    @Test
+    public void shouldUpdateInstance() {
+        Player marta = PlayerTestDataBuilder.martaPlayer();
+        Player.PlayerBuilder builder = marta.toBuilder();
+
+        Email newEmail = Email.of("newemail@email.com");
+
+        Player martaUpdated = builder.withEmail(newEmail).build();
+
+        assertEquals(marta.getName(), martaUpdated.getName());
+        assertEquals(marta.getStart(), martaUpdated.getStart());
+        assertEquals(marta.getEnd(), martaUpdated.getEnd());
+        assertEquals(newEmail, martaUpdated.getEmail());
+        assertEquals(marta.getPosition(), martaUpdated.getPosition());
+        assertEquals(marta.getSalary(), martaUpdated.getSalary());
+        assertEquals(marta.getGoal(), martaUpdated.getGoal());
     }
 }

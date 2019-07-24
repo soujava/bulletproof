@@ -87,6 +87,9 @@ public class Player {
         this.end = end;
     }
 
+    public PlayerBuilder toBuilder() {
+        return new PlayerBuilder(this);
+    }
 
     public static PlayerBuilder builder() {
         return new PlayerBuilder();
@@ -112,6 +115,15 @@ public class Player {
         private MonetaryAmount salary;
 
         private PlayerBuilder() {
+        }
+
+        private PlayerBuilder(Player player) {
+            this.name = player.name;
+            this.start = player.start;
+            this.end = player.end;
+            this.email = player.email;
+            this.position = player.position;
+            this.salary = player.salary;
         }
 
         public PlayerBuilder withName(String name) {
