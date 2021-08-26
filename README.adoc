@@ -1,1 +1,5 @@
 = bulletproof
+
+There is no doubt about the benefits good coding practices bring, such as clean code, easy maintaining, and a fluent API. However, do best practices help with data integrity? This discussion came up, mainly, with new storage technologies, such as the NoSQL database, that do not have native validation that the developer usually faces when working to SQL schema. A good topic that covers clean code is whose objects expose behavior and hide data, which differs from structured programming. The goal of this post is to explain the benefits of using a rich model against the anemic model to get data integrity and bulletproof code.
+
+Ref: https://dzone.com/articles/designing-a-bulletproof-code
